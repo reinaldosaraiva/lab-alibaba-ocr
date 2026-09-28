@@ -26,7 +26,7 @@ exigem contas de modelos.
 | `patches/` | patch aplicado ao OCR pinado para confiar na CA do gateway do lab |
 | `scripts/benchmark/` e `scripts/spike/` | experimentos de benchmark e spikes da Fase 0 |
 | `results/` | evidências medidas; os resultados brutos não são necessários para o guia |
-| `plans/` | histórico Reentry no clone de pesquisa; não integra a edição pública |
+| `plans/` | histórico Reentry no clone de pesquisa; não integra a edição didática |
 
 ## O que foi demonstrado
 

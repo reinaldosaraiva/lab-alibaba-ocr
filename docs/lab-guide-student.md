@@ -36,7 +36,7 @@ a imagem GitLab CE, portanto precisa de rede.
 O Módulo 4 requer um projeto GitLab CE com runner registrado, um clone com
 permissão de push, configuração local do DeepSeek e do gateway Magalu, duas
 contas OAuth distintas (`saas-reviewer` e `saas-bot`) e seus tokens. Esse
-provisionamento **não** é automatizado pelo bootstrap público. O revisor
+provisionamento **não** é automatizado pelo bootstrap deste guia. O revisor
 DeepSeek pode consumir franquia ou gerar cobrança conforme sua conta; confira
 o limite antes de executar o loop.
 
@@ -155,7 +155,7 @@ O script guarda credenciais em `.lab/`, que não é versionado. As portas HTTP e
 SSH do Compose ficam ligadas apenas ao loopback do host.
 
 `make lab-up` também verifica o ambiente de um repositório externo de modelo
-usado na pesquisa original; por isso, para este guia público, use os alvos
+usado na pesquisa original; por isso, neste guia, use os alvos
 `lab-ocr` e `lab-gitlab-up` separadamente. Após reiniciar Docker em um lab
 existente, suba o Compose diretamente para preservar os tokens do bootstrap:
 
@@ -200,7 +200,7 @@ O caso de referência foi o MR local **!36** no projeto `lab/sandbox` em
 review do DeepSeek retornou 0 findings. A pipeline #60 terminou em `success`;
 `saas-reviewer` aprovou e o MR foi integrado ao `develop`.
 É uma observação histórica do host de origem; esse MR em `localhost` não pode
-ser aberto por quem clonou a edição pública no próprio computador.
+ser aberto por quem clonou a edição didática no próprio computador.
 
 | Evidência | O que conferir no seu MR |
 |---|---|
