@@ -1,0 +1,45 @@
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:18.4.1-ce.0
+    hostname: gitlab
+    ports:
+      - "127.0.0.1:${GITLAB_HTTP_PORT:-8929}:80"
+      - "127.0.0.1:${GITLAB_SSH_PORT:-2224}:22"
+    environment:
+      GITLAB_ROOT_PASSWORD: "${GITLAB_ROOT_PASSWORD:?set GITLAB_ROOT_PASSWORD (see .lab/gitlab.env)}"
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost:8929'
+        nginx['listen_port'] = 80
+        # GitLab 18 readiness 404s clients outside monitoring.ip_whitelist
+        # (loopback only by default); allow the Docker bridge gateway (lab-only).
+        gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128', '192.168.0.0/16']
+    volumes:
+      - gitlab_config:/etc/gitlab
+      - gitlab_logs:/var/log/gitlab
+      - gitlab_data:/var/opt/gitlab
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost/-/readiness || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 120
+      start_period: 120s
+  # Runner para pipelines de teste (células S0-B de ingestão via CI artifact/SARIF).
+  # Registro é one-shot (scripts/spike/s0b_runner.py) e persiste em runner_config.
+  gitlab-runner:
+    image: gitlab/gitlab-runner:v18.4.0
+    restart: unless-stopped
+    command: run
+    # network_mode host: o runner (e os job containers, que herdam
+    # network_mode=host do registro) falam com o GitLab pela porta
+    # publicada http://localhost:8929 — a URL interna http://gitlab:80
+    # nao e alcancavel de fora da rede do compose (Docker Desktop).
+    network_mode: host
+    volumes:
+      - runner_config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  gitlab_config:
+  gitlab_logs:
+  gitlab_data:
+  runner_config:

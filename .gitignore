@@ -1,0 +1,19 @@
+# Upstream clone of alibaba/open-code-review (Apache-2.0), pinned at 01cf7ff for the review.
+# Kept out of this repo until PLANO.md §8.2 item 2 (fork vs binary dependency) is decided.
+open-code-review/
+.ocr/
+.venv/
+__pycache__/
+.ruff_cache/
+.pytest_cache/
+*.pyc
+.DS_Store
+.env
+.env.*
+# lab (S002): secrets, built OCR binary
+.lab/
+bin/
+# reentry harness state (transient, adapter-owned)
+plans/.reentry-qwen-pair-evidence.lock
+# Qwen Code session state (transient, per-machine)
+.qwen/

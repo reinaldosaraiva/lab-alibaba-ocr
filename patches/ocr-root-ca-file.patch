@@ -1,0 +1,27 @@
+diff --git a/internal/llm/client.go b/internal/llm/client.go
+index fa72b21..1408c73 100644
+--- a/internal/llm/client.go
++++ b/internal/llm/client.go
+@@ -12,4 +12,6 @@ package llm
+ import (
+ 	"context"
++	"crypto/tls"
++	"crypto/x509"
+ 	"encoding/json"
+ 	"errors"
+@@ -72,4 +74,15 @@ var httpClientWithHeaderTimeout = func(timeout time.Duration) *http.Client {
+ 		t.ResponseHeaderTimeout = timeout + responseHeaderTimeoutMargin
+ 	}
++	// OCR_ROOT_CA_FILE installs a custom root pool (e.g. a lab gateway CA).
++	// Custom roots also bypass the macOS platform verifier, which rejects
++	// self-signed lab CAs that Go's own verifier accepts.
++	if caFile := os.Getenv("OCR_ROOT_CA_FILE"); caFile != "" {
++		if pem, err := os.ReadFile(caFile); err == nil {
++			pool := x509.NewCertPool()
++			if pool.AppendCertsFromPEM(pem) {
++				t.TLSClientConfig = &tls.Config{RootCAs: pool}
++			}
++		}
++	}
+ 	return &http.Client{Transport: t}
+ }
