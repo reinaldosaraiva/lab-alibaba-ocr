@@ -7,6 +7,10 @@ commit e um bot distinto aprova o merge request. O cenário usa o
 GitLab CE local, `deepseek-v4-pro` como revisor e `qwen38-27b` via Magalu como
 corretor na execução de referência.
 
+![Quadro branco com o fluxo do laboratório: MR, review DeepSeek, correção Qwen, testes e aprovação](docs/diagramas/01-arquitetura-quadro-branco.png)
+
+![Quadro branco com o exercício do MR de desconto, os quatro passos e os gates de aprovação](docs/diagramas/02-ciclo-mr-quadro-branco.png)
+
 O laboratório responde perguntas concretas:
 
 1. Como provar que o OCR revisou **todos** os arquivos selecionados e o SHA
@@ -47,18 +51,10 @@ de tentar um MR. `make lab-up` pertence à trilha de pesquisa com
 
 ## Topologia e fronteiras
 
-```mermaid
-flowchart LR
-    S[Branch de estudo] --> G[GitLab CE: MR]
-    G --> R[OCR + DeepSeek: review]
-    R --> RC[saas-reviewer: comentários]
-    RC --> F[Qwen38/Magalu: proposta]
-    F --> BC[saas-bot: fix commit]
-    BC --> Q[Testes isolados + pre-commit + CI]
-    Q --> RR[OCR: nova revisão]
-    RR --> A[saas-reviewer: aprovação]
-    A --> M[Merge opcional]
-```
+O primeiro quadro mostra a sequência do driver; entre testes e aprovação
+há uma nova revisão OCR no SHA final. O segundo usa a fixture de desconto
+para explicar o resultado esperado. Um modelo real pode parar em qualquer
+gate sem produzir correção.
 
 | Componente | Função | Fronteira de confiança |
 |---|---|---|

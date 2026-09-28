@@ -7,6 +7,8 @@ passa por um GitLab CE local e termina com um MR em que **DeepSeek revisa**,
 históricos são identificados como tal; as evidências do seu computador devem
 ser registradas separadamente.
 
+![Quadro branco da arquitetura do lab: GitLab, DeepSeek, Qwen, testes e aprovação](diagramas/01-arquitetura-quadro-branco.png)
+
 ## Objetivos e mapa de execução
 
 Ao terminar, você deve conseguir responder com um SHA e uma evidência para
@@ -289,6 +291,14 @@ quando houver concorrência intensa. Texto em diff/MR também pode tentar
 instruir o modelo; a regra confiável fica fora da branch do MR.
 
 ## Módulo 5 — MR com dois provedores
+
+![Quadro branco do exercício: bug de desconto, finding, correção, nova revisão e gates](diagramas/02-ciclo-mr-quadro-branco.png)
+
+O quadro ilustra um percurso possível. O driver só declara convergência
+quando a execução real entrega manifesto completo, zero findings, testes e
+CI verdes no SHA final e aprovação registrada. Para facilitar a leitura,
+a figura escreve o desconto como `0.33`; a fixture Python usa o inteiro
+`33` e divide por `100`.
 
 Este é o exercício avançado. Ele exige DeepSeek, Magalu, OCR compilado,
 GitLab CE com runner registrado, projeto semeado e contas distintas
