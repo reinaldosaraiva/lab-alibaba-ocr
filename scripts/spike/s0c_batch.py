@@ -61,9 +61,8 @@ def start_proxy() -> tuple[subprocess.Popen, str] | None:
     """Sobe o proxy local de terminação TLS para o gateway magalu.
 
     Go em darwin valida TLS contra o keychain do macOS (ignora
-    SSL_CERT_FILE) e o gateway tem certificado self-signed — o proxy em
-    127.0.0.1 reencaminha com TLS não-verificado. Retorna (Popen, url) ou
-    None se nenhum modelo usa o magalu.
+    SSL_CERT_FILE). O proxy em 127.0.0.1 usa a CA local para verificar
+    o gateway. Retorna (Popen, url) ou None se nenhum modelo usa o magalu.
     """
     if not any(p == "magalu" for p in MODELS.values()):
         return None

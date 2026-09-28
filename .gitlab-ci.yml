@@ -7,5 +7,8 @@ saas-quality:
   script:
     - python -m pip install ruff==0.16.8
     - python -m unittest discover -s scripts/saas -p 'test_*.py' -q
+    - python -m unittest discover -s exercises/discount -p 'test_*.py' -q
     - ruff check scripts/saas
+    - ruff check exercises/discount
     - ruff format --check scripts/saas
+    - ruff format --check exercises/discount

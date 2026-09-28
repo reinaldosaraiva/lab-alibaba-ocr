@@ -1,9 +1,8 @@
 """Proxy local de terminação TLS para o gateway Magalu (spike S0-C).
 
 O binário OCR (Go) valida TLS contra o keychain do macOS e ignora
-SSL_CERT_FILE em darwin; o gateway 10.251.196.27:8080 tem certificado
-self-signed. Este proxy escuta em 127.0.0.1 (porta livre) e reencaminha
-para o gateway com TLS não-verificado — o tráfego fica em localhost.
+SSL_CERT_FILE em darwin. Este proxy histórico escuta em 127.0.0.1 (porta
+livre) e reencaminha ao gateway com a CA local verificada por Python.
 
 Uso:
     python3 scripts/spike/local_llm_proxy.py [--port 0]
@@ -28,7 +27,8 @@ cfg = json.loads(Path(".lab/ocr-config.json").read_text(encoding="utf-8"))
 # base do host sem o sufixo /v1 — o path da requisição (que já traz /v1/...)
 # é anexado inteiro, senão dobra para /v1/v1/...
 GATEWAY = cfg["custom_providers"]["magalu"]["url"].rstrip("/").removesuffix("/v1")
-CTX = ssl._create_unverified_context()
+CA = Path(".lab/magalu-ca.pem")
+CTX = ssl.create_default_context(cafile=str(CA))
 
 
 class Handler(BaseHTTPRequestHandler):

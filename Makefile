@@ -7,9 +7,15 @@ I               ?= unseen
 LAB_ENV      := .lab/gitlab.env
 GITLAB_URL   := http://localhost:8929
 
-.PHONY: check pre-commit checker baseline-hashes bench-floor s0a-batch s0a-report help lab-up lab-tools lab-ocr lab-gitlab-up lab-l1-check lab-manifest lab-down lab-nuke
+.PHONY: check pre-commit checker baseline-hashes bench-floor s0a-batch s0a-report help lab-up lab-tools lab-ocr lab-gitlab-up lab-l1-check lab-manifest lab-down lab-nuke study-check
 
 check: pre-commit checker
+
+# Rota portátil do guia: não exige o review-model externo nem o checker Reentry.
+study-check:
+	python3 -m unittest discover -s scripts/saas -p 'test_*.py' -q
+	python3 -m unittest discover -s exercises/discount -p 'test_*.py' -q
+	pre-commit run --all-files
 
 pre-commit:
 	pre-commit run --all-files
